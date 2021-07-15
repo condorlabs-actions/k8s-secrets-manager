@@ -10,33 +10,48 @@ const YAML = require('json-to-pretty-yaml');
 // fs.writeFile('output.yaml', data);
 
 const run = async ()=>{
+  let secretCollections = []
   try {
-    // Connect with AWS 
-    const secretFromAWS = await awsHelper.getSecretsCredentialsFrom(core.getInput('aws_secrets_name'), {
-      accessKeyId: core.getInput('AWS_EKS_ACCESS_KEY'),
-      secretAccessKey: core.getInput('AWS_EKS_SECRET_KEY')
-    });
-  
-    const outputSecretName = core.getInput('output_secret_name')
+    let AwsSecretsConfigs; 
+    try {
+      AwsSecretsConfigs = JSON.parse(core.getInput("eks_secrets_configs")); 
+      console.log(JSON.stringify(AwsSecretsConfigs))
+    } catch (error) {
+      return core.setFailed('Invalid JSON String on eks_secrets_configs.')
+    }
+
+    if(!AwsSecretsConfigs.length) return core.setFailed('No config provided.');
+
     const outputSecretNamespace = core.getInput('output_secret_namespace')
+    for (const config of AwsSecretsConfigs) {
+       // Connect with AWS 
+      const secretFromAWS = await awsHelper.getSecretsCredentialsFrom(config.secret_name, {
+        accessKeyId: core.getInput('AWS_EKS_ACCESS_KEY'),
+        secretAccessKey: core.getInput('AWS_EKS_SECRET_KEY')
+      });
+      const secretFormat = {
+        apiVersion: 'v1',
+        kind: 'Secret', 
+        metadata: {
+          name: config.output_secret_name,
+          ...(outputSecretNamespace ? {namespace: outputSecretNamespace} : {} )
+        },
+        type: 'Opaque',
+        stringData: secretFromAWS
+      }
+
+      const outputType = core.getInput('output_type'); 
+      let secretFinalOutput = null; 
+      if(outputType === 'yaml'){
+        secretFinalOutput = YAML.stringify(secretFormat);
+      }else{
+        secretFinalOutput = JSON.stringify(secretFormat);
+      }
+      
+      secretCollections.push(secretFinalOutput)
+    }
   
-    const secretFormat = {
-      apiVersion: 'v1',
-      kind: 'Secret', 
-      metadata: {
-        name: outputSecretName,
-        ...(outputSecretNamespace ? {namespace: outputSecretNamespace} : {} )
-      },
-      type: 'Opaque',
-      stringData: secretFromAWS
-    }
     
-    const outputType = core.getInput('output_type'); 
-    if(outputType === 'yaml'){
-      console.log(YAML.stringify(secretFormat))
-    }else{
-      console.log(JSON.stringify(secretFormat))
-    }
   
     // // `who-to-greet` input defined in action metadata file
     // const nameToGreet = core.getInput('who-to-greet');
