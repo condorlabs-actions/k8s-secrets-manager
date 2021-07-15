@@ -1,6 +1,6 @@
 name: 'aws-secrets-manager-builder'
 description: 'This action gets your environment vars and map them into a secret file to apply in your EKS Cluster'
-beanding: 
+branding: 
   icon: activity
   color: red
 inputs:
