@@ -12,6 +12,7 @@ module.exports.getSecretsCredentialsFrom = async (secretName, { accessKeyId, sec
     
     let secretJSON; 
     const SecretResult = await SecretManagerClient.getSecretValue({SecretId: secretName}).promise()
+    
     if ('SecretString' in SecretResult) {
         secretJSON = JSON.parse(SecretResult.SecretString);
     } else {
