@@ -7,12 +7,9 @@ inputs:
   AWS_EKS_SECRET_KEY: 
     description: 'your AWS secret key with the necessary permissions'
     required: true
-  aws_secrets_name: 
-    description: 'Secret name to get'
+  eks_secrets_configs: 
     required: true
-  output_secret_name:
-    description: 'Secret name for your EKS file. This name will be used in your deployment or configMaps files'
-    required: true
+    description: 'Array manifiest to get the secrets from aws and set the secrets name for ek8 file'
   output_secret_namespace:
     description: 'namespace where for your EKS file. This name will be used in your deployment or configMaps files'
     required: true
@@ -20,6 +17,9 @@ inputs:
     description: 'You can choose yaml or send your file directly to EKS. If yaml is choosed you need to specify the path to locate your file'
     required: false
     default: EKS
+  output_file_name: 
+    description: 'Name of your output file with all the secretes found'
+    default: 'output.yaml'
 outputs:
   final_string:
     description: 'the generated secret in a string format'

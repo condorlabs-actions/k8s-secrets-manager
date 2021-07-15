@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "format": "prettier \"**/*.{js,jsx,ts,tsx}\" --write",
+    "lint-global": "echo \"Prettier is running...\" && prettier \"**/*.{js,jsx,ts,tsx}\" --write && echo \"ESlint is running...\" && eslint ."
   },
   "keywords": [],
   "author": "",
@@ -14,5 +17,18 @@
     "@actions/github": "^5.0.0",
     "aws-sdk": "^2.946.0",
     "json-to-pretty-yaml": "^1.2.2"
+  },
+  "devDependencies": {
+    "@condor-labs/eslint-config": "1.0.3",
+    "@condor-labs/matchbox": "1.1.5",
+    "@condor-labs/prettier-config": "1.0.3",
+    "eslint": "7.23.0",
+    "husky": "6.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint",
+      "prettier --write"
+    ]
   }
 }
