@@ -1,0 +1,28 @@
+name: 'kms-secrets-manager-action'
+description: 'This action gets your environment vars and map them into a secret file to apply in your EKS Cluster'
+inputs:
+  AWS_EKS_ACCESS_KEY: 
+    description: 'your AWS access key with the necessary permissions'
+    required: true
+  AWS_EKS_SECRET_KEY: 
+    description: 'your AWS secret key with the necessary permissions'
+    required: true
+  aws_secrets_name: 
+    description: 'Secret name to get'
+    required: true
+  output_secret_name:
+    description: 'Secret name for your EKS file. This name will be used in your deployment or configMaps files'
+    required: true
+  output_secret_namespace:
+    description: 'namespace where for your EKS file. This name will be used in your deployment or configMaps files'
+    required: true
+  output_type: 
+    description: 'You can choose yaml or send your file directly to EKS. If yaml is choosed you need to specify the path to locate your file'
+    required: false
+    default: EKS
+outputs:
+  final_string:
+    description: 'the generated secret in a string format'
+runs:
+  using: 'node12'
+  main: './index.js'
