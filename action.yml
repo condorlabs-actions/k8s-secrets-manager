@@ -1,5 +1,7 @@
 name: 'aws-secrets-manager-builder'
 description: 'This action gets your environment vars and map them into a secret file to apply in your EKS Cluster'
+icon: activity
+color: red
 inputs:
   AWS_EKS_ACCESS_KEY: 
     description: 'your AWS access key with the necessary permissions'
