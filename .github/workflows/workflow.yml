@@ -29,7 +29,7 @@ jobs:
         with: 
           AWS_EKS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_EKS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-          eks_secrets_configs: '[{ "secret_name": "test/kuntur/bot", "output_secret_name": "compliance-nseuqe" }, { "secret_name": "test/kuntur/bot", "output_secret_name": "compliance-nseuqe" }]'
-          output_secret_namespace: 'compliance'
+          eks_secrets_configs: '[{ "secret_name": "test/kuntur/bot", "output_secret_name": "kuntur-secrets-eks" }]'
+          output_secret_namespace: 'kunturapp'
           output_type: 'yaml'
       - run: cat output.yaml
