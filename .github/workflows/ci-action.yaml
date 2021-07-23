@@ -1,0 +1,28 @@
+name: test-action
+on:
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  running-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['10']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Installing NodeJS
+        run:  apt update && apt install nodejs -y && apt install npm -y
+      - name: Update npm
+        run: npm install -g npm@next # We need to update npm to a version grater than 7 in order to make the matchbox work
+      - name: Installing dependencies 
+        run: npm install 
+      - name: Running testings 
+        run: npm run test:coverage
+      - name: Check coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        with:
+          path: './coverage/lcov.info'
+          min_coverage: 70
+      - name: Check ESLint rules
+        run: npm run lint
