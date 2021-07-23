@@ -8,7 +8,8 @@ const run = async () => {
   try {
     let AwsSecretsConfigs;
     try {
-      AwsSecretsConfigs = JSON.parse(core.getInput('eks_secrets_configs'));
+      const configJSONString = core.getInput('eks_secrets_configs');
+      AwsSecretsConfigs = JSON.parse(configJSONString);
     } catch (error) {
       return core.setFailed('Invalid JSON String on eks_secrets_configs.');
     }
@@ -19,7 +20,7 @@ const run = async () => {
 
     const outputSecretNamespace = core.getInput('output_secret_namespace');
     for (const config of AwsSecretsConfigs) {
-      // Connect with AWS
+      // eslint-disable-next-line
       const secretFromAWS = await awsHelper.getSecretsCredentialsFrom(config.secret_name, {
         accessKeyId: core.getInput('AWS_EKS_ACCESS_KEY'),
         secretAccessKey: core.getInput('AWS_EKS_SECRET_KEY'),
@@ -49,11 +50,14 @@ const run = async () => {
 
     const finalFile = secretCollections.join('\n---\n');
     core.setOutput('final_string', finalFile);
-
     fs.writeFileSync(core.getInput('output_file_name'), finalFile);
   } catch (error) {
     core.setFailed(error.message);
   }
 };
 
-run();
+if (process.env.NODE_ENV !== 'test') {
+  run();
+}
+
+module.exports.run = run;
