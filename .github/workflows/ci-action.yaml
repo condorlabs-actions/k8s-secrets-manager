@@ -1,4 +1,4 @@
-name: test-action
+name: Running Code Quality checks 
 on:
   pull_request:
     branches: [master, main]
