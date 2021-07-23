@@ -1,4 +1,4 @@
-name: Running Code Quality checks 
+name: Running-Code-Quality-Checks 
 on:
   pull_request:
     branches: [master, main]
