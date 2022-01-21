@@ -30,6 +30,9 @@ const run = async () => {
         apiVersion: 'v1',
         kind: 'Secret',
         metadata: {
+          annotations: {
+            "helm.sh/resource-policy": "keep",
+          },
           name: config.output_secret_name,
           ...(outputSecretNamespace ? { namespace: outputSecretNamespace } : {}),
         },
