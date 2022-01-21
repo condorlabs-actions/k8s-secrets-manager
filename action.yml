@@ -26,7 +26,6 @@ inputs:
   output_helm_policy:
     description: 'This is the policy for helm to keep or not the secrets each time helm does an upgrade. "keep" for keeping the secrets'
     required: false
-    default: "keep"
 outputs:
   final_string:
     description: 'the generated secret in a string format'
