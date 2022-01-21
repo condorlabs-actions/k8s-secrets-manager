@@ -26,6 +26,7 @@ const run = async () => {
         secretAccessKey: core.getInput('AWS_EKS_SECRET_KEY'),
       });
 
+      
       const secretFormat = {
         apiVersion: 'v1',
         kind: 'Secret',
@@ -36,6 +37,13 @@ const run = async () => {
         type: 'Opaque',
         stringData: secretFromAWS,
       };
+      
+      const helmPolicy = core.getInput('output_helm_policy');
+      if(helmPolicy){
+        secretFormat.metadata.annotations = {
+          "helm.sh/resource-policy": helmPolicy,
+        };
+      }
 
       const outputType = core.getInput('output_type');
       let secretFinalOutput = null;
