@@ -31,7 +31,7 @@ const run = async () => {
         kind: 'Secret',
         metadata: {
           annotations: {
-            "helm.sh/resource-policy": "keep",
+            "helm.sh/resource-policy": core.getInput('output_helm_policy'),
           },
           name: config.output_secret_name,
           ...(outputSecretNamespace ? { namespace: outputSecretNamespace } : {}),
